@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:gravity="top"
+	android:layout_gravity="top">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="top">
+
+		<Button
+			android:id="@+id/btnOpenTutors"
+			android:layout_width="match_parent"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Преподователи"/>
+
+		<Button
+			android:id="@+id/btnOpenCourses"
+			android:layout_width="match_parent"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_height="wrap_content"
+			android:text="Предметы"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+
