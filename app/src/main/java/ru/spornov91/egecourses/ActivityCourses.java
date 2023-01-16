@@ -13,7 +13,7 @@ import java.util.*;
 public class ActivityCourses extends Activity 
 {
 	String TAG = "spornov91";
-	String[] names;
+	String[][] allcourses;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -51,7 +51,8 @@ public class ActivityCourses extends Activity
 									sb.append(line + "\n");
 								}
 								br.close();
-								names = jsontoarr(sb.toString());
+								String idsubject = getIntent().getStringExtra("idsubject");
+								allcourses = jsontoarr(sb.toString(), idsubject);
 
 						}
 					}
@@ -77,8 +78,7 @@ public class ActivityCourses extends Activity
 										public void run()
 										{
 											ListView lvMain = findViewById(R.id.lvAllCourses);
-											ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-																									android.R.layout.simple_list_item_1, names);
+											AdapterCourses adapter = new AdapterCourses(getApplicationContext(), allcourses);
 											lvMain.setAdapter(adapter);
 										}
 									});
@@ -105,34 +105,71 @@ public class ActivityCourses extends Activity
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private static String[] jsontoarr(String str)
+	private static String[][] jsontoarr(String str, String idsubject)
 	{
-		ArrayList<String> list = new ArrayList<String>();
+		String[][] arr2 = null;
+		String[][] arr3 = null;
 		try
 		{
 			//JSONObject obj = new JSONObject(str);
 			JSONArray arr = new JSONArray(str);
+			arr2 = new String[arr.length()][6];
 			for (int n = 0; n < arr.length(); n++)
 			{
 				JSONObject obj = arr.getJSONObject(n);
-				//Log.d("array",""+obj);
-
-				JSONArray arr2 = obj.getJSONArray("courses");
-				for (int c = 0; c < arr2.length(); c++)
-				{
-					JSONObject obj2 = arr2.getJSONObject(c);
-					String _name = obj2.getString("name");
-					// Log.d("obj.name",_name);
-					list.add(_name);
+				
+				if(obj.getString("idsubject").equals(idsubject)){
+				arr2[n][0]   = obj.getString("id");
+				arr2[n][0+1] = obj.getString("idsubject");
+				arr2[n][0+2] = obj.getString("subject");
+				arr2[n][0+3] = obj.getString("name");
+				arr2[n][0+4] = obj.getString("price");
+				arr2[n][0+5] = obj.getString("pay");
 				}
+				//Log.d("obj.get()",obj.getInt(0).toString());
 			} 
+			
+			// count null row
+			
+			ArrayList<Integer> notnullindexes = new ArrayList<Integer>();
+			
+			for (int i = 0; i < arr.length(); i++)
+			{
+				if(arr2[i][0] != null){
+					notnullindexes.add(i);
+				}
+			}
+			
+			arr3 = new String[notnullindexes.size()][6];
+			for (int i = 0; i < notnullindexes.size(); i++)
+			{
+				for (int j = 0; j < 6; j++)
+				{
+				    arr3[i][j] = arr2[notnullindexes.get(i)][j];
+				}
+			}
+			Log.d("arr3",notnullindexes.size()+"");
+			
+			if(notnullindexes.size() == 0){
+				arr3 = new String[1][6];
+				arr3[0][0]   = "*";
+			    arr3[0][0+1] = "Нет курсов";
+			    arr3[0][0+2] = "Попробуйте другие курсы";
+				arr3[0][0+3] = "Бесплатно";
+				arr3[0][0+4] = "true";
+				arr3[0][0+5] = "000";
+			}
+			//JSONArray arr2 = obj.getJSONArray("english");
+			//for(int o = 0;o < arr2[0].length;o++){
+			   // Log.d("obj.name",arr2[0][0].toString());
+			//}
+			
 
 		}
 		catch (JSONException e)
 		{
 			e.printStackTrace();
 		}
-
-		return list.toArray(new String[0]);
-    };
+		return arr3;
+       };
 }

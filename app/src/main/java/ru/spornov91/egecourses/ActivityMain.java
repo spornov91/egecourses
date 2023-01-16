@@ -28,7 +28,7 @@ public class ActivityMain extends Activity
 		openCourses.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					Intent intent = new Intent(getApplicationContext(), ActivityCourses.class);
+					Intent intent = new Intent(getApplicationContext(), ActivitySubjects.class);
 					startActivity(intent);
 				}
 		});

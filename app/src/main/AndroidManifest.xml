@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
 		<activity android:name=".ActivityTutors" android:label="Преподователи" />
-		<activity android:name=".ActivityCourses" android:label="Предметы" />
+		<activity android:name=".ActivitySubjects" android:label="Предметы" />
+		<activity android:name=".ActivityCourses" android:label="Курсы" />
     </application>
 
 </manifest>

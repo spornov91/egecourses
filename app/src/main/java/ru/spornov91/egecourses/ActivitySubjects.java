@@ -9,17 +9,19 @@ import android.util.*;
 import android.view.*;
 import org.json.*;
 import java.util.*;
+import android.widget.AdapterView.*;
+import android.content.*;
 
-public class ActivityTutors extends Activity 
+public class ActivitySubjects extends Activity 
 {
 	String TAG = "spornov91";
-	String[][] alltutors;
+	String[][] allsubjects;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_tutors);
-		
+        setContentView(R.layout.layout_subjects);
+
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 		
@@ -27,7 +29,7 @@ public class ActivityTutors extends Activity
 				public void run()
 				{
 
-					String url = "http://z91374e0.beget.tech/api/tutors.php";
+					String url = "http://z91374e0.beget.tech/api/subjects.php";
 					HttpURLConnection c = null;
 					try
 					{
@@ -51,7 +53,7 @@ public class ActivityTutors extends Activity
 									sb.append(line + "\n");
 								}
 								br.close();
-								alltutors = jsontoarr(sb.toString());
+								allsubjects = jsontoarr(sb.toString());
 
 						}
 					}
@@ -76,9 +78,21 @@ public class ActivityTutors extends Activity
 										@Override
 										public void run()
 										{
-											ListView lvMain = findViewById(R.id.lvAllTutors);
-											AdapterCourses adapter = new AdapterCourses(getApplicationContext(), alltutors);
+											ListView lvMain = findViewById(R.id.lvAllCourses);
+											AdapterSubjects adapter = new AdapterSubjects(getApplicationContext(), allsubjects);
 											lvMain.setAdapter(adapter);
+											lvMain.setOnItemClickListener(new OnItemClickListener() {
+													@Override
+													public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+													{
+														//String item1 = (String)((TextView) view).getText(); error
+														//Integer idCourse = getIdCourseByPosition();
+														Log.d("id =",allsubjects[position][0].toString());
+														Intent intent = new Intent(getApplicationContext(), ActivityCourses.class);
+														intent.putExtra("idsubject", allsubjects[position][0].toString());
+														startActivity(intent);
+													}
+												});
 										}
 									});
 							}
@@ -91,7 +105,8 @@ public class ActivityTutors extends Activity
 				};
 			});
 		t.start();
-	}
+
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -102,7 +117,11 @@ public class ActivityTutors extends Activity
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
+	private static Integer getIdCourseByPosition(){
+		return 1;
+	};
+	
 	private static String[][] jsontoarr(String str)
 	{
 		String[][] arr2 = null;
@@ -116,7 +135,7 @@ public class ActivityTutors extends Activity
 				JSONObject obj = arr.getJSONObject(n);
 				arr2[n][0]   = obj.getString("id");
 				arr2[n][0+1] = obj.getString("name");
-				arr2[n][0+2] = obj.getString("course");
+				arr2[n][0+2] = obj.getString("price");
 				//Log.d("obj.get()",obj.getInt(0).toString());
 			} 
 			//JSONArray arr2 = obj.getJSONArray("english");
@@ -129,5 +148,5 @@ public class ActivityTutors extends Activity
 		}
 		return arr2;
 
-	};
+		};
 }
